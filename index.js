@@ -101,6 +101,11 @@ app.get('/post/:slug', function(req, res) {
 ****************************/
 
 // Start listening on port PORT
-app.listen(PORT, function() {
-    console.log('Server listening on port:', PORT);
+//app.listen(PORT, function() {
+//    console.log('Server listening on port:', PORT);
+//});
+
+//New app.listen for Heroku (given in project description)
+app.listen(process.env.PORT || 3000, function() {
+    console.log('Listening!');
 });
