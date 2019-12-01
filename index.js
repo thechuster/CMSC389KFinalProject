@@ -11,9 +11,14 @@ var marked = require('marked');
 var app = express();
 var PORT = 8000;
 
+var http = require('http').Server(app);
+var io = require('socket.io')(http);
+const users = {}
+
 var _DATA = dataUtil.loadData().blog_posts;
 
-/// MIDDLEWARE 
+
+/// MIDDLEWARE
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -22,12 +27,12 @@ app.set('view engine', 'handlebars');
 app.use('/public', express.static('public'));
 
 /****************************
-        HELPER FUNCTIONS 
+        HELPER FUNCTIONS
 ****************************/
 
 
 /****************************
-          WEBSITE 
+          WEBSITE
 ****************************/
 
 app.get("/", function(req, res) {
@@ -37,6 +42,23 @@ app.get("/", function(req, res) {
         tags: tags
     });
 });
+
+app.get("/album/:album_name", function(req, res) {
+    var tags = dataUtil.getAllTags(_DATA);
+		res.render('album', {
+        data: _DATA,
+        tags: tags
+    });
+});
+
+app.get("/chat", function(req, res) {
+    var tags = dataUtil.getAllTags(_DATA);
+		res.render('socket', {
+        data: _DATA,
+        tags: tags
+    });
+});
+
 
 app.get("/members", function(req, res) {
     var tags = dataUtil.getAllTags(_DATA);
@@ -63,7 +85,7 @@ app.get('/tag/:tag', function(req, res) {
 });
 
 /****************************
-            API 
+            API
 ****************************/
 
 app.get("/create", function(req, res) {
@@ -73,7 +95,7 @@ app.get("/create", function(req, res) {
 app.post('/create', function(req, res) {
     var body = req.body;
 
-    // Transform tags and content 
+    // Transform tags and content
     body.tags = body.tags.split(" ");
     body.content = marked(body.content);
 
@@ -97,7 +119,7 @@ app.get('/post/:slug', function(req, res) {
 
 
 /****************************
-          RUN 
+          RUN
 ****************************/
 
 // Start listening on port PORT
@@ -109,3 +131,17 @@ app.get('/post/:slug', function(req, res) {
 app.listen(process.env.PORT || 3000, function() {
     console.log('Listening!');
 });
+
+io.on('connection', socket => {
+    socket.on('new-user', name => {
+      users[socket.id] = name
+      socket.broadcast.emit('user-connected', name)
+    })
+    socket.on('send-chat-message', message => {
+      socket.broadcast.emit('chat-message', { message: message, name: users[socket.id] })
+    })
+    socket.on('disconnect', () => {
+      socket.broadcast.emit('user-disconnected', users[socket.id])
+      delete users[socket.id]
+    })
+  })
