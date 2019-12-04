@@ -33,7 +33,16 @@ mongoose.connection.on('error', function() {
     process.exit(1);
 });
 
-// have the home page get all reviews of recent albums and display them
+
+/****************************
+        HELPER FUNCTIONS 
+****************************/
+
+
+/****************************
+          WEBSITE 
+****************************/
+
 app.get("/", function(req, res) {
     var tags = dataUtil.getAllTags(_DATA);
     res.render('home', {
@@ -41,6 +50,34 @@ app.get("/", function(req, res) {
         tags: tags
     });
 });
+
+app.get("/members", function(req, res) {
+    var tags = dataUtil.getAllTags(_DATA);
+    res.render('members', {
+        data: _DATA,
+        tags: tags
+    });
+});
+
+app.get('/tag/:tag', function(req, res) {
+    var tags = dataUtil.getAllTags(_DATA);
+    var tag = req.params.tag;
+    var posts = [];
+    _DATA.forEach(function(post) {
+        if (post.tags.includes(tag)) {
+            posts.push(post);
+        }
+    });
+    res.render('home', {
+        tag: tag,
+        data: posts,
+        tags: tags
+    });
+});
+
+/****************************
+            API 
+****************************/
 
 app.get("/create", function(req, res) {
     res.render('create');
@@ -70,21 +107,11 @@ app.get('/post/:slug', function(req, res) {
     res.render('post', blog_post);
 });
 
-app.get('/tag/:tag', function(req, res) {
-    var tags = dataUtil.getAllTags(_DATA);
-    var tag = req.params.tag;
-    var posts = [];
-    _DATA.forEach(function(post) {
-        if (post.tags.includes(tag)) {
-            posts.push(post);
-        }
-    });
-    res.render('home', {
-        tag: tag,
-        data: posts,
-        tags: tags
-    });
-});
+
+
+/****************************
+          RUN 
+****************************/
 
 app.post('/add_album', function(req,res) {
     var album = new Album({
@@ -152,6 +179,11 @@ app.delete('/album/:id', function(req,res) {
 
 
 // Start listening on port PORT
-app.listen(PORT, function() {
-    console.log('Server listening on port:', PORT);
+//app.listen(PORT, function() {
+//    console.log('Server listening on port:', PORT);
+//});
+
+// HEROKU
+app.listen(process.env.PORT || 3000, function() {
+    console.log('Listening!');
 });
