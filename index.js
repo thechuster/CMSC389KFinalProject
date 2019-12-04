@@ -11,6 +11,7 @@ var marked = require('marked');
 var app = express();
 var PORT = 8000;
 var mongoose = require('mongoose');
+var router = express.Router();
 
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
@@ -43,11 +44,23 @@ mongoose.connection.on('error', function() {
         HELPER FUNCTIONS
 ****************************/
 
+function getAllGenres() {
+    
+}
 
 /****************************
           WEBSITE
 ****************************/
 
+/* GET home page. */
+app.get('/', function(req, res, next) {
+    var genres = 
+    Album.find(function(err, content) {
+      res.render('home', { title: "ALBUMS", data: content });
+  });
+});
+
+/*
 app.get("/", function(req, res) {
     var tags = dataUtil.getAllTags(_DATA);
     res.render('home', {
@@ -55,6 +68,7 @@ app.get("/", function(req, res) {
         tags: tags
     });
 });
+*/
 
 app.get("/album/:album_name", function(req, res) {
     var tags = dataUtil.getAllTags(_DATA);
