@@ -11,11 +11,8 @@
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.17.1",
-<<<<<<< HEAD
     "dotenv": "^8.2.0",
-=======
     "date-fns": "^2.8.1",
->>>>>>> albert
     "express": "^4.17.1",
     "express-handlebars": "^3.0.0",
     "marked": "^0.7.0",
