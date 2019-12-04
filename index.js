@@ -10,8 +10,10 @@ var moment = require('moment');
 var marked = require('marked');
 var app = express();
 var PORT = 8000;
+var mongoose = require('mongoose');
 
 var _DATA = dataUtil.loadData().blog_posts;
+var Album = require('./Album');
 
 /// MIDDLEWARE 
 app.use(logger('dev'));
@@ -20,6 +22,17 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.engine('handlebars', exphbs({ defaultLayout: 'main', partialsDir: "views/partials/" }));
 app.set('view engine', 'handlebars');
 app.use('/public', express.static('public'));
+var dotenv = require('dotenv');
+dotenv.config();
+
+// MONGODB
+console.log(process.env.MONGODB);
+mongoose.connect(process.env.MONGODB);
+mongoose.connection.on('error', function() {
+    console.log('MongoDB Connection Error. Please make sure that MongoDB is running.');
+    process.exit(1);
+});
+
 
 /****************************
         HELPER FUNCTIONS 
@@ -99,6 +112,71 @@ app.get('/post/:slug', function(req, res) {
 /****************************
           RUN 
 ****************************/
+
+app.post('/add_album', function(req,res) {
+    var album = new Album({
+        artist: req.body.artist,
+        title: req.body.title,
+        year: parseInt(req.body.year),
+        genre: req.body.genre,
+        reviews: []
+    })
+
+    album.save(function(err) {
+        if (err) throw err;
+        return res.send('Succesfully inserted album.');
+    });  
+})
+
+app.get('/album', function(req,res) {
+    Album.find({}, function(err, albums) {
+        if (err) throw err;
+        res.send(albums);
+    });
+})
+
+// add review to a specific album
+app.post('/album/:id/review', function(req,res) {
+    Album.findOne({ _id: req.params.id }, function(err, album) {
+        if (err) throw err;
+        if (!album) return res.send('No album found with that ID.');
+
+        album.reviews.push({
+            rating: parseFloat(req.body.rating),
+            comment: req.body.comment,
+            title: req.body.title,
+            author: req.body.author
+        });
+
+        album.save(function(err) {
+            if (err) throw err;
+            res.send('Sucessfully added review.');
+        });
+    });
+});
+
+// get all the reviews for a specific album
+app.get('/album/:id/reviews', function(req,res) {
+    Album.findOne({ _id: req.params.id }, function(err, album) {
+        if (err) throw err;
+        if (!album) return res.send('No album found with that ID.');
+        res.send(album.reviews);
+    });
+});
+
+// delete an album
+app.delete('/album/:id', function(req,res) {
+    Album.findByIdAndRemove(req.params.id, function(err, album) {
+        if (err) throw err;
+        if (!album) {
+            return res.send('No album found with given ID.');
+        }
+        res.send('Album deleted!');
+    });
+})
+
+// delete your own review from an album
+
 
 // Start listening on port PORT
 //app.listen(PORT, function() {
