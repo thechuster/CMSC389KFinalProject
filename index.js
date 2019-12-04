@@ -113,7 +113,7 @@ app.get('/post/:slug', function(req, res) {
           RUN 
 ****************************/
 
-app.post('/add_album', function(req,res) {
+app.post('/api/add_album', function(req,res) {
     var album = new Album({
         artist: req.body.artist,
         title: req.body.title,
@@ -128,7 +128,7 @@ app.post('/add_album', function(req,res) {
     });  
 })
 
-app.get('/album', function(req,res) {
+app.get('/api/album', function(req,res) {
     Album.find({}, function(err, albums) {
         if (err) throw err;
         res.send(albums);
