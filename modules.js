@@ -12,12 +12,7 @@ function square(n) {
 	return n*n;
 }
 
-function root(n) {
-	return Math.sqrt(n)
-}
-
 module.exports = {
 	factorial: factorial,
 	square: square,
-	root: root
 }

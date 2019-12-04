@@ -13,7 +13,7 @@ var PORT = 8000;
 
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
-const users = {}
+const users = {};
 
 var _DATA = dataUtil.loadData().blog_posts;
 
