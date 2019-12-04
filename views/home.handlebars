@@ -6,12 +6,12 @@
 
 {{#each data}}
 <article>
-	<h2 class="title">{{this.title}}</h2> <i>{{time}}</i>
+	<h2 class="title">{{this.title}}</h2> <i>{{this.artist}}</i>
 	<hr>
 	<div class="content">
-	    {{{this.preview}}}...
+	    Album art and review will be here...
 	</div>
-	<a href="/post/{{this.slug}}">Read more...</a>
+	<a href="/album/{{this.id}}/reviews">Read more reviews</a>
 </article>
 {{else}}
 

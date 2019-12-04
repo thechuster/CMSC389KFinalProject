@@ -214,13 +214,6 @@ app.delete('/album/:id', function(req,res) {
     });
 })
 
-// delete your own review from an album
-
-
-// Start listening on port PORT
-//app.listen(PORT, function() {
-//    console.log('Server listening on port:', PORT);
-//});
 
 // HEROKU
 app.listen(process.env.PORT || 3000, function() {
