@@ -5,7 +5,7 @@ function loadData() {
 }
 
 function saveData(data) {
-    // poke.json stores the pokemon array under key "pokemon", 
+    // poke.json stores the pokemon array under key "pokemon",
     // so we are recreating the same structure with this object
     var obj = {
         blog_posts: data
