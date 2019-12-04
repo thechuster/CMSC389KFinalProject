@@ -44,31 +44,34 @@ mongoose.connection.on('error', function() {
         HELPER FUNCTIONS
 ****************************/
 
-function getAllGenres() {
-    
-}
+
 
 /****************************
           WEBSITE
 ****************************/
 
 /* GET home page. */
-app.get('/', function(req, res, next) {
-    var genres = 
-    Album.find(function(err, content) {
-      res.render('home', { title: "ALBUMS", data: content });
-  });
-});
+app.get('/', function(req, res, next) {    
+    var genres = [];
+    
+    
+    Album.find({}).then(function(albums) {      
+        //iterates through all albums and makes a list of genres
+        albums.forEach(function(a) {
+            if (!(a.genre in genres)){
+                genres.push(a.genre);
+            }
+        });
 
-/*
-app.get("/", function(req, res) {
-    var tags = dataUtil.getAllTags(_DATA);
-    res.render('home', {
-        data: _DATA,
-        tags: tags
+        //render handlebars
+        res.render('home', { 
+            title: "ALBUMS", 
+            data: albums, 
+            tags: genres
+           });
     });
+
 });
-*/
 
 app.get("/album/:album_name", function(req, res) {
     var tags = dataUtil.getAllTags(_DATA);
