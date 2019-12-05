@@ -28,6 +28,10 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.engine('handlebars', exphbs({ defaultLayout: 'main', partialsDir: "views/partials/" }));
 app.set('view engine', 'handlebars');
 app.use('/public', express.static('public'));
+app.use('/images', express.static('images'));
+app.use('/fonts', express.static('fonts'));
+app.use('/script.js', express.static('script.js'));
+app.use('/socket.io/socket.io.js', express.static('socket.io/socket.io.js'));
 var dotenv = require('dotenv');
 dotenv.config();
 
@@ -39,36 +43,38 @@ mongoose.connection.on('error', function() {
     process.exit(1);
 });
 
-
 /****************************
         HELPER FUNCTIONS
 ****************************/
 
-function getAllGenres() {
-    
-}
+
 
 /****************************
           WEBSITE
 ****************************/
 
 /* GET home page. */
-app.get('/', function(req, res, next) {
-    var genres = 
-    Album.find(function(err, content) {
-      res.render('home', { title: "ALBUMS", data: content });
-  });
-});
+app.get('/', function(req, res, next) {    
+    var genres = [];
+    
+    
+    Album.find({}).then(function(albums) {      
+        //iterates through all albums and makes a list of genres
+        albums.forEach(function(a) {
+            if (!(a.genre in genres)){
+                genres.push(a.genre);
+            }
+        });
 
-/*
-app.get("/", function(req, res) {
-    var tags = dataUtil.getAllTags(_DATA);
-    res.render('home', {
-        data: _DATA,
-        tags: tags
+        //render handlebars
+        res.render('home', { 
+            title: "ALBUMS", 
+            data: albums, 
+            tags: genres
+           });
     });
+
 });
-*/
 
 app.get("/album/:album_name", function(req, res) {
     var tags = dataUtil.getAllTags(_DATA);
@@ -78,9 +84,33 @@ app.get("/album/:album_name", function(req, res) {
     });
 });
 
+app.get("/genres", function(req, res) {
+    var tags = dataUtil.getAllTags(_DATA);
+		res.render('genres', {
+        data: _DATA,
+        tags: tags
+    });
+});
+
+app.get("/charts", function(req, res) {
+    var tags = dataUtil.getAllTags(_DATA);
+		res.render('charts', {
+        data: _DATA,
+        tags: tags
+    });
+});
+
+app.get("/submit", function(req, res) {
+    var tags = dataUtil.getAllTags(_DATA);
+		res.render('submit', {
+        data: _DATA,
+        tags: tags
+    });
+});
+
 app.get("/chat", function(req, res) {
     var tags = dataUtil.getAllTags(_DATA);
-		res.render('socket', {
+        res.render('socket', {
         data: _DATA,
         tags: tags
     });
@@ -211,13 +241,6 @@ app.delete('/album/:id', function(req,res) {
     });
 })
 
-// delete your own review from an album
-
-
-// Start listening on port PORT
-//app.listen(PORT, function() {
-//    console.log('Server listening on port:', PORT);
-//});
 
 // HEROKU
 app.listen(process.env.PORT || 3000, function() {
@@ -236,4 +259,4 @@ io.on('connection', socket => {
       socket.broadcast.emit('user-disconnected', users[socket.id])
       delete users[socket.id]
     })
-  })
+})
