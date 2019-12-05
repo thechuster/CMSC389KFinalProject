@@ -105,11 +105,37 @@ app.get("/submit", function(req, res) {
 		res.render('submit');
 });
 
+
+app.get("/submit_review", function(req,res){
+    res.render('submit_review');
+});
+
+//handles submitting review via website and page redirection
+app.post('/submit_review', function(req,res) {
+
+    console.log(req.body.title);
+    var album = new Album({
+        artist: req.body.artist,
+        title: req.body.title,
+        year: parseInt(req.body.year),
+        genre: req.body.genre,
+        PicURL: req.body.PicURL,
+        reviews: []
+    })
+
+    album.save(function(err) {
+        if (err) throw err;     
+    });  
+
+    res.redirect('/album/submit');
+});
+
+
 app.get("/submit_album", function(req, res) {
     res.render('submit_album');
 });
 
-//handles submitting via website and page redirection
+//handles submitting album via website and page redirection
 app.post('/submit_album', function(req,res) {
 
     console.log(req.body.title);
