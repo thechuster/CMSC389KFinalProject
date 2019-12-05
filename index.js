@@ -100,12 +100,33 @@ app.get("/charts", function(req, res) {
     });
 });
 
+
 app.get("/submit", function(req, res) {
-    var tags = dataUtil.getAllTags(_DATA);
-		res.render('submit', {
-        data: _DATA,
-        tags: tags
-    });
+		res.render('submit');
+});
+
+app.get("/submit_album", function(req, res) {
+    res.render('submit_album');
+});
+
+//handles submitting via website and page redirection
+app.post('/submit_album', function(req,res) {
+
+    console.log(req.body.title);
+    var album = new Album({
+        artist: req.body.artist,
+        title: req.body.title,
+        year: parseInt(req.body.year),
+        genre: req.body.genre,
+        PicURL: req.body.PicURL,
+        reviews: []
+    })
+
+    album.save(function(err) {
+        if (err) throw err;     
+    });  
+
+    res.redirect('/album/submit');
 });
 
 app.get("/chat", function(req, res) {
@@ -140,10 +161,6 @@ app.get('/tag/:tag', function(req, res) {
         tags: tags
     });
 });
-
-/****************************
-            API
-****************************/
 
 app.get("/create", function(req, res) {
     res.render('create');
@@ -185,11 +202,13 @@ app.post('/add_album', function(req,res) {
         title: req.body.title,
         year: parseInt(req.body.year),
         genre: req.body.genre,
+        PicURL: req.body.PicURL,
         reviews: []
     })
 
     album.save(function(err) {
         if (err) throw err;
+        res.redirect('/album/dfad')
         return res.send('Succesfully inserted album.');
     });  
 })
