@@ -1,0 +1,50 @@
+<div id="two" class="wrapper style2 special">
+    <h1>Write a Review</h1>
+
+    <article class="submitpage">
+        <form method="POST" action="/submit_review">
+
+            <div class="input-field">
+                <label>Artist</label>
+                <input type="text" name="artist" rows="1">
+            </div>
+
+            <div class="input-field">
+                <label>Album</label>
+                <input type="text" name="album" rows="1">
+            </div>
+
+            <div class="input-field">
+                <label>Rating</label>
+                <select name="rating" display="5">
+                    <option>- Rating -</option>
+                    <option value="5">5</option>
+                    <option value="4">4</option>
+                    <option value="3">3</option>
+                    <option value="2">2</option>
+                    <option value="1">1</option>
+                </select>
+            </div>
+
+            <div class="input-field">
+                <label>Review Title</label>
+                <input type="text" name="title" rows="1" placeholder="Title..">
+            </div>
+
+            <div class="input-field">
+                <label>Review</label>
+                <textarea type="text" name="comment" rows="5"  placeholder="Start typing here.." ></textarea>
+            </div>
+
+            <div class="input-field">
+                <label>Author</label>
+                <input type="text" name="author" rows="1" placeholder="Your Name Here.." ></textarea>
+            </div>           
+
+            <button type="submit_album">Submit</button>
+
+        </form>
+
+
+    </article>
+</div>
