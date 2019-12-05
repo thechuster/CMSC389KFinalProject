@@ -47,4 +47,8 @@ var albumSchema = new mongoose.Schema({
 });
 
 var Album = mongoose.model('Album', albumSchema);
-module.exports = Album;
+var Review = mongoose.model('Review', reviewSchema);
+module.exports = {
+    Album: Album,
+    Review: Review
+};
