@@ -127,7 +127,7 @@ app.post('/submit_review', function(req,res) {
         if (err) throw err;     
     });  
 
-    res.redirect('/album/submit');
+    res.redirect('/album/sample');
 });
 
 
@@ -152,7 +152,7 @@ app.post('/submit_album', function(req,res) {
         if (err) throw err;     
     });  
 
-    res.redirect('/album/submit');
+    res.redirect('/album/sample');
 });
 
 app.get("/chat", function(req, res) {
