@@ -296,6 +296,34 @@ app.delete('/album/:id', function(req,res) {
     });
 })
 
+app.delete('/delete_album/:album', function(req,res) {
+    Album.remove({ title: req.params.album}, function(err, album) {
+        if (err) throw err;
+        if (!album) {
+            return res.send('No album found with given ID');
+        }
+        res.send('Album deleted!')
+    })
+    
+})
+
+// delete a review posted by a person based on title of review
+// app.delete('/review/:author/:title', function(req,res) {
+//     var title = req.params.title;
+//     var author = req.params.author;
+//     Album.findOne({title: req.body.album}, function(err, album) {
+//         if (err) {
+//             throw err
+//         }
+//     })
+//         _.each(album.reviews, function(i, index) {
+//             if (i.author == author && i.title == title) {
+//                 album.
+//             }
+//         })
+            
+// })
+
 
 // HEROKU
 app.listen(process.env.PORT || 3000, function() {
