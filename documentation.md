@@ -10,6 +10,8 @@ Project Topic: Album Reviews
 
 URL: https://musicality389.herokuapp.com/
 
+GitHub URL: https://github.com/thechuster/CMSC389KFinalProject 
+
 ---
 
 

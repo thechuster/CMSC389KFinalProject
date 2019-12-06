@@ -1,92 +1,132 @@
-# Final Project
-#### Out: 11/1/19 | Deadline: 12/6/19 11:00 PM
+# Musicality
 
-### Overview
+---
 
-In this project, you will work with up to 2 other students (max group size of 3) to tie together everything you have learned up to now in the semester.
+Name: Albert Chu, Perri Smith, Tsipora Stone
 
-### Objectives
+Date: 12/06/19
 
-The purpose of this project is to create a fully functioning **"real-time application"** within a group of up to 3 students.
+Project Topic: Album Reviews
 
-First, you must select a topic for your project to be on. Example topics could be (you cannot use any of these for your project):
+URL: https://musicality389.herokuapp.com/
 
-- Local Dogs for Adoption
-- Movie Reviews
-- UMD Clubs and Activities
-- Rock Climbing Gyms
+GitHub URL: https://github.com/thechuster/CMSC389KFinalProject 
 
-This project is largely open ended. The only requirement is to satisfy all parts of the `Specifications` section below, which are broad and flexible. Outside of that, you are free to be creative and make something you are proud of.
-
-### Grading
-
-You fill submit both the application source as well as a `documentation.md` file that documents how you implemented each part of the project.
-
-Grading will be done using the `documentation.md` file to test your application.
-
-Each specificiation has two types of requirements:
-- (REQ): These are requirements **must** be followed. Failue to do so can result in up to 50% point deductions for the entire project.
-- (X pt): These specifications are worth X points.
+---
 
 
-### Specifications
+### 1. Data Format and Storage
 
+Data point fields:
+- `Field 1`:     artist       `Type: string`
+- `Field 2`:     title       `Type: string`
+- `Field 3`:     year       `Type: Number`
+- `Field 4`:     genre       `Type: string`
+- `Field 5`:     picURL       `Type: string`
+- `Field 6`:     reviews       `Type: array`
 
-1. **Fulfillment of Midterm Project Requirements**
+Schema: 
+```javascript
+{
+   var reviewSchema = new mongoose.Schema({
+    rating: {
+        type: Number,
+        min: 0.0,
+        max: 5.0,
+        required: true
+    },
+    comment: {
+        type: String
+    },
+    title: {
+        type: String,
+        required: true
+    },
+    author: {
+        type: String,
+        required: true
+    }
+});
 
-    - (REQ) (50 pt) Data should be stored using MongoDB, instead of similar to how the Pokemon API and the blog engine was set up
-    - Have at least 3 different schemas
+var albumSchema = new mongoose.Schema({
+    artist: {
+        type: String,
+        required: true
+    },
+    title: {
+        type: String,
+        required: true
+    },
+    year: {
+        type: Number,
+        min: 0,
+        max: 2019,
+        required: true
+    },
+    genre: {
+        type: String,
+        required: true
+    },
+    PicURL: {
+        type: String
+    },
+    reviews: [reviewSchema]
+});
+}
+```
 
+### 2. Live Updates
 
-2. **Live Updates**
+Live updates come from sockets which we use to create a notification system that notifies the user of new reviews that are posted to the site
 
-    Users will need to be able to add data to your local storage, and have live updates and a notification system.
+HTML form route: `/notifications`
 
-    - (10 pt) Incorporate sockets.
+### 3. View Data
 
-3. **View Data**
+GET endpoint route: `/`
+GET api endpoint route: `/api/album`
 
-    Users should be able to view all data in two ways:
+Navigation Filters
+1. Home -> `  /  `
+2. Genres -> `  /genres  `
+3. Artists -> `  /artists  `
+4. Submit -> `  /submit  `
+5. Group Members -> `  /members  `
 
-    - (REQ) The HTML pages should be generated using Handlebars
-    - (10 pt) Handlebars.js should be used to generate at least 5 pages,
-              including a form submission page for your respective entity
-    - (5 pt) Have a (6th) description about page, which includes the names
-             of the group members and description of the application
+### 4. API
 
-4. **API**
+GET endpoint routes:
+1. displays list of all genres -> ` /genres `
+2. displays list of albums under that genre -> ` /genre/:genre `
+3. displays list of all artists -> ` /artists `
+4. displays list of albums under a specific artist -> ` /artist/:artist `
+5. gets all albums stored in database -> ` /api/album `
+6. get all reviews for a specific album -> ` /api/album/:id/reviews `
 
-    Use express.js to have at least 10 different endpoints
+POST endpoint routes:
+1. post an album to the database -> `/api/add_album `
+2. post a review to a specific album -> `/api/album/:id/review `
 
-    - (10 pt) At least 2 post endpoints
-    - (10 pt) At least 2 delete endpoints
+DELETE endpoint routes:
+1. delete an album based off of its mongodb id -> `/api/album/:id `
+2. delete an album based off of the album name -> `/api/delete_album/:album `
 
-4. **Modules**
+### 5. Modules
 
-    Create at least 2 modules (to separate functionality from backend API functionality)
+Modules
+1. average -> takes the average of the ratings
+2. test -> to test the functionality of the website
 
-    - (15 pt) Create at least 2 modules
+### 6. NPM Packages
+1. colors
+2. one-liner-joke
 
-5. **NPM Packages**
+### 7. User Interface
 
-    - (15 pt) Use 2 new npm packages that we have not used before
+css files
+1. main.css
+2. font-awesome.min.css
 
-6. **User Interface**
+### 8. Deployment
 
-    - (10 pt) Make it look nice
-
-7. **Deployment**
-
-    - (5 pt) Deploy to the web (either Heroku or Now)
-
-8. **README**
-
-    - (5 pt) Create a README with all the specifications
-
-### Submission
-
-We will be Heroku [Heroku](http://heroku.com) to submit one link per project.
-
-At the top of your project, include the **Heroku link** (ex: https://myapp.herokuapp.com) at the top of your `documentation.md` file, like so:
-
-Submit just the `documentation.md` file to the submit server.
+URL: https://musicality389.herokuapp.com/
