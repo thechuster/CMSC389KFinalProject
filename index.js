@@ -141,6 +141,61 @@ app.get("/genre/:genre", function(req,res){
     });
 });
 
+
+//displays a page with list of all genres
+app.get("/artists", function(req, res) {
+
+    var artists = [];    
+    
+    Album.find({}).then(function(albums) {      
+        //iterates through all albums and makes a list of genres
+        albums.forEach(function(a) {
+            if (!(a.artist in artists)){
+                artists.push(a.artist);
+            }
+        });
+
+        artists.sort();
+
+        console.log(artists);
+
+        //render handlebars
+        res.render('artists', { 
+            title: "Artists", 
+            artists: artists
+           });
+    });
+
+});
+
+//displays list of albums for a specific genre
+app.get("/artist/:artist", function(req,res){
+    var artist = req.params.artist;
+    var a_lst = [];    
+    
+    Album.find({}).then(function(albums) {      
+        //iterates through all albums and adds those with the genre
+        albums.forEach(function(a) {
+            if ((a.artist == artist)){
+                a_lst.push(a);
+            }
+        });
+
+        
+        //sorts by album title
+        a_lst.sort(function(a1, a2){
+            return a1.title < a2.title;
+        });
+
+        console.log(a_lst);
+
+        res.render('artist', { 
+            a_lst: a_lst
+        });
+
+    });
+});
+
 app.get("/charts", function(req, res) {
     var tags = dataUtil.getAllTags(_DATA);
 		res.render('charts', {
