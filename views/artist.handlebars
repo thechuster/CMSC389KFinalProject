@@ -1,0 +1,21 @@
+<ul>
+
+{{#each a_lst}}
+
+	<article>
+        <h2 class="title">{{this.title}}</h2> <i>{{this.artist}}</i>
+        <br>
+        
+            {{this.reviews.length}} reviews.
+
+        
+        <div class="content">
+            <img src="{{this.PicURL}}" height="300">
+        </div>
+        <a href="/submit/submit_review">Write a review</a>
+        <hr>
+    </article>
+
+{{/each}}
+
+</ul>
