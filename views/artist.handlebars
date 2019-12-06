@@ -3,10 +3,11 @@
 {{#each a_lst}}
 
 	<article>
-        <h2 class="title">{{this.title}}</h2> <i>{{this.artist}}</i>
+        <h2 class="title"><a href="../album/{{this.title}}">{{this.title}}</a></h2> <i>{{this.artist}}</i>
         <br>
         
             {{this.reviews.length}} reviews.
+            
 
         
         <div class="content">
