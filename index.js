@@ -364,7 +364,6 @@ app.post('/add_album', function(req,res) {
 
     album.save(function(err) {
         if (err) throw err;
-
         return res.send('Succesfully inserted album.');
     });  
 })
