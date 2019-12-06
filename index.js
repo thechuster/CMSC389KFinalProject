@@ -352,7 +352,7 @@ app.get('/post/:slug', function(req, res) {
           API
 ****************************/
 
-app.post('/add_album', function(req,res) {
+app.post('/api/add_album', function(req,res) {
     var album = new Album({
         artist: req.body.artist,
         title: req.body.title,
@@ -368,7 +368,7 @@ app.post('/add_album', function(req,res) {
     });  
 })
 
-app.get('/album', function(req,res) {
+app.get('/api/album', function(req,res) {
     Album.find({}, function(err, albums) {
         if (err) throw err;
         res.send(albums);
@@ -376,7 +376,7 @@ app.get('/album', function(req,res) {
 })
 
 // add review to a specific album
-app.post('/album/:id/review', function(req,res) {
+app.post('/api/album/:id/review', function(req,res) {
     Album.findOne({ _id: req.params.id }, function(err, album) {
         if (err) throw err;
         if (!album) return res.send('No album found with that ID.');
@@ -396,7 +396,7 @@ app.post('/album/:id/review', function(req,res) {
 });
 
 // get all the reviews for a specific album
-app.get('/album/:id/reviews', function(req,res) {
+app.get('/api/album/:id/reviews', function(req,res) {
     Album.findOne({ _id: req.params.id }, function(err, album) {
         if (err) throw err;
         if (!album) return res.send('No album found with that ID.');
@@ -405,7 +405,7 @@ app.get('/album/:id/reviews', function(req,res) {
 });
 
 // delete an album
-app.delete('/album/:id', function(req,res) {
+app.delete('/api/album/:id', function(req,res) {
     Album.findByIdAndRemove(req.params.id, function(err, album) {
         if (err) throw err;
         if (!album) {
@@ -415,6 +415,33 @@ app.delete('/album/:id', function(req,res) {
     });
 })
 
+app.delete('/api/delete_album/:album', function(req,res) {
+    Album.remove({ title: req.params.album}, function(err, album) {
+        if (err) throw err;
+        if (!album) {
+            return res.send('No album found with given ID');
+        }
+        res.send('Album deleted!')
+    })
+    
+})
+
+// delete a review posted by a person based on title of review
+// app.delete('/review/:author/:title', function(req,res) {
+//     var title = req.params.title;
+//     var author = req.params.author;
+//     Album.findOne({title: req.body.album}, function(err, album) {
+//         if (err) {
+//             throw err
+//         }
+//     })
+//         _.each(album.reviews, function(i, index) {
+//             if (i.author == author && i.title == title) {
+//                 album.
+//             }
+//         })
+            
+// })
 /****************************
             RUN
 ****************************/

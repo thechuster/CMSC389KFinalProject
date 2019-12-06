@@ -1,53 +1,130 @@
-### Specifications
+#Musicality
+
+---
+
+Name: Albert Chu, Perri Smith, Tsipora Stone
+
+Date: 12/06/19
+
+Project Topic: Album Reviews
+
+URL: https://musicality389.herokuapp.com/
+
+---
 
 
-1. **Fulfillment of Midterm Project Requirements**
+### 1. Data Format and Storage
 
-    - (REQ) (50 pt) Data should be stored using MongoDB, instead of similar to how the Pokemon API and the blog engine was set up
-    - Have at least 3 different schemas
+Data point fields:
+- `Field 1`:     artist       `Type: string`
+- `Field 2`:     title       `Type: string`
+- `Field 3`:     year       `Type: Number`
+- `Field 4`:     genre       `Type: string`
+- `Field 5`:     picURL       `Type: string`
+- `Field 6`:     reviews       `Type: array`
 
+Schema: 
+```javascript
+{
+   var reviewSchema = new mongoose.Schema({
+    rating: {
+        type: Number,
+        min: 0.0,
+        max: 5.0,
+        required: true
+    },
+    comment: {
+        type: String
+    },
+    title: {
+        type: String,
+        required: true
+    },
+    author: {
+        type: String,
+        required: true
+    }
+});
 
-2. **Live Updates**
+var albumSchema = new mongoose.Schema({
+    artist: {
+        type: String,
+        required: true
+    },
+    title: {
+        type: String,
+        required: true
+    },
+    year: {
+        type: Number,
+        min: 0,
+        max: 2019,
+        required: true
+    },
+    genre: {
+        type: String,
+        required: true
+    },
+    PicURL: {
+        type: String
+    },
+    reviews: [reviewSchema]
+});
+}
+```
 
-    Users will need to be able to add data to your local storage, and have live updates and a notification system.
+### 2. Live Updates
 
-    - Added notifications with sockets.
+Live updates come from sockets which we use to create a notification system that notifies the user of new reviews that are posted to the site
 
-3. **View Data**
+HTML form route: `/notifications`
 
-    Users should be able to view all data in two ways:
+### 3. View Data
 
-    - (REQ) The HTML pages should be generated using Handlebars
-    - (10 pt) Handlebars.js should be used to generate at least 5 pages,
-              including a form submission page for your respective entity
-    - (5 pt) Have a (6th) description about page, which includes the names
-             of the group members and description of the application
+GET endpoint route: `/`
+GET api endpoint route: `/api/album`
 
-4. **API**
+Navigation Filters
+1. Home -> `  /  `
+2. Genres -> `  /genres  `
+3. Artists -> `  /artists  `
+4. Submit -> `  /submit  `
+5. Group Members -> `  /members  `
 
-    Use express.js to have at least 10 different endpoints
+### 4. API
 
-    - (10 pt) At least 2 post endpoints
-    - (10 pt) At least 2 delete endpoints
+GET endpoint routes:
+1. displays list of all genres -> ` /genres `
+2. displays list of albums under that genre -> ` /genre/:genre `
+3. displays list of all artists -> ` /artists `
+4. displays list of albums under a specific artist -> ` /artist/:artist `
+5. gets all albums stored in database -> ` /api/album `
+6. get all reviews for a specific album -> ` /api/album/:id/reviews `
 
-4. **Modules**
+POST endpoint routes:
+1. post an album to the database -> `/api/add_album `
+2. post a review to a specific album -> `/api/album/:id/review `
 
-    Create at least 2 modules (to separate functionality from backend API functionality)
+DELETE endpoint routes:
+1. delete an album based off of its mongodb id -> `/api/album/:id `
+2. delete an album based off of the album name -> `/api/delete_album/:album `
 
-    - (15 pt) Create at least 2 modules
+### 5. Modules
 
-5. **NPM Packages**
+Modules
+1. average -> takes the average of the ratings
+2. 
 
-    - Used date-fns and 
+### 6. NPM Packages
+1. date-fns
+2. 
 
-6. **User Interface**
+### 7. User Interface
 
-    - Added and edited the CSS.
+css files
+1. main.css
+2. font-awesome.min.css
 
-7. **Deployment**
+### 8. Deployment
 
-    - Deploted to Heroku.
-
-8. **README**
-
-    - This is the readme.
+URL: https://musicality389.herokuapp.com/
