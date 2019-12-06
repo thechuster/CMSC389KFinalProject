@@ -12,6 +12,7 @@ var app = express();
 var PORT = 8000;
 var mongoose = require('mongoose');
 var router = express.Router();
+var date = require('date-fns');
 
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
@@ -58,8 +59,7 @@ mongoose.connection.on('error', function() {
 
 /* GET home page. */
 app.get('/', function(req, res, next) {    
-    var genres = [];
-    
+    var genres = [];    
     
     Album.find({}).then(function(albums) {      
         //iterates through all albums and makes a list of genres
@@ -87,11 +87,113 @@ app.get("/album/:album_name", function(req, res) {
     });
 });
 
+
+//displays a page with list of all genres
 app.get("/genres", function(req, res) {
-    var tags = dataUtil.getAllTags(_DATA);
-		res.render('genres', {
-        data: _DATA,
-        tags: tags
+
+    var genres = [];    
+    
+    Album.find({}).then(function(albums) {      
+        //iterates through all albums and makes a list of genres
+        albums.forEach(function(a) {
+            if (!(a.genre in genres)){
+                genres.push(a.genre);
+            }
+        });
+
+        genres.sort();
+
+        console.log(genres);
+
+        //render handlebars
+        res.render('genres', { 
+            title: "Genres", 
+            genres: genres
+           });
+    });
+
+});
+
+//displays list of albums for a specific genre
+app.get("/genre/:genre", function(req,res){
+    var genre = req.params.genre;
+    var a_lst = [];    
+    
+    Album.find({}).then(function(albums) {      
+        //iterates through all albums and adds those with the genre
+        albums.forEach(function(a) {
+            if ((a.genre == genre)){
+                a_lst.push(a);
+            }
+        });
+
+        
+        //sorts by album title
+        a_lst.sort(function(a1, a2){
+            return a1.title < a2.title;
+        });
+
+        console.log(a_lst);
+
+        res.render('genre', { 
+            a_lst: a_lst
+        });
+
+    });
+});
+
+
+//displays a page with list of all genres
+app.get("/artists", function(req, res) {
+
+    var artists = [];    
+    
+    Album.find({}).then(function(albums) {      
+        //iterates through all albums and makes a list of genres
+        albums.forEach(function(a) {
+            if (!(a.artist in artists)){
+                artists.push(a.artist);
+            }
+        });
+
+        artists.sort();
+
+        console.log(artists);
+
+        //render handlebars
+        res.render('artists', { 
+            title: "Artists", 
+            artists: artists
+           });
+    });
+
+});
+
+//displays list of albums for a specific genre
+app.get("/artist/:artist", function(req,res){
+    var artist = req.params.artist;
+    var a_lst = [];    
+    
+    Album.find({}).then(function(albums) {      
+        //iterates through all albums and adds those with the genre
+        albums.forEach(function(a) {
+            if ((a.artist == artist)){
+                a_lst.push(a);
+            }
+        });
+
+        
+        //sorts by album title
+        a_lst.sort(function(a1, a2){
+            return a1.title < a2.title;
+        });
+
+        console.log(a_lst);
+
+        res.render('artist', { 
+            a_lst: a_lst
+        });
+
     });
 });
 
@@ -104,13 +206,21 @@ app.get("/charts", function(req, res) {
 });
 
 
+/****************************
+          SUBMIT
+****************************/
+
+
 app.get("/submit", function(req, res) {
 		res.render('submit');
 });
 
-
 app.get("/submit_review", function(req,res){
     res.render('submit_review');
+});
+
+app.get("/notifications", function(req,res){
+    res.render('notifications');
 });
 
 //handles submitting review via website and page redirection
@@ -137,7 +247,7 @@ app.post('/submit_review', function(req,res) {
 
     });
 
-    res.redirect('/album/sample');
+    res.redirect('/album/' + req.body.album);
 });
 
 
@@ -162,7 +272,7 @@ app.post('/submit_album', function(req,res) {
         if (err) throw err;     
     });  
 
-    res.redirect('/album/sample');
+    res.redirect('/album/' + req.body.title);
 });
 
 app.get("/chat", function(req, res) {
@@ -229,7 +339,7 @@ app.get('/post/:slug', function(req, res) {
 
 
 /****************************
-          RUN
+          API
 ****************************/
 
 app.post('/api/add_album', function(req,res) {
@@ -257,7 +367,7 @@ app.get('/api/album', function(req,res) {
 })
 
 // add review to a specific album
-app.post('/album/:id/review', function(req,res) {
+app.post('/api/album/:id/review', function(req,res) {
     Album.findOne({ _id: req.params.id }, function(err, album) {
         if (err) throw err;
         if (!album) return res.send('No album found with that ID.');
@@ -277,7 +387,7 @@ app.post('/album/:id/review', function(req,res) {
 });
 
 // get all the reviews for a specific album
-app.get('/album/:id/reviews', function(req,res) {
+app.get('/api/album/:id/reviews', function(req,res) {
     Album.findOne({ _id: req.params.id }, function(err, album) {
         if (err) throw err;
         if (!album) return res.send('No album found with that ID.');
@@ -286,7 +396,7 @@ app.get('/album/:id/reviews', function(req,res) {
 });
 
 // delete an album
-app.delete('/album/:id', function(req,res) {
+app.delete('/api/album/:id', function(req,res) {
     Album.findByIdAndRemove(req.params.id, function(err, album) {
         if (err) throw err;
         if (!album) {
@@ -296,7 +406,7 @@ app.delete('/album/:id', function(req,res) {
     });
 })
 
-app.delete('/delete_album/:album', function(req,res) {
+app.delete('/api/delete_album/:album', function(req,res) {
     Album.remove({ title: req.params.album}, function(err, album) {
         if (err) throw err;
         if (!album) {
@@ -323,6 +433,9 @@ app.delete('/delete_album/:album', function(req,res) {
 //         })
             
 // })
+/****************************
+            RUN
+****************************/
 
 
 // HEROKU

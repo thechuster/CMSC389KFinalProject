@@ -1,11 +1,9 @@
-function factorial(n) {
-	if (n==0) {
-		return 1;
+function average(list) {
+	var average = 0;
+	for (var i = 0; i < list.length; i++) {
+		average += list[i];
 	}
-	if (n ==1) {
-		return 1;
-	}
-	return n * factorial(n-1);
+	return average/list.length;
 }
 
 function square(n) {
