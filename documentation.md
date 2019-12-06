@@ -1,4 +1,4 @@
-#Musicality
+# Musicality
 
 ---
 
@@ -113,7 +113,7 @@ DELETE endpoint routes:
 
 Modules
 1. average -> takes the average of the ratings
-2. 
+2. test -> to test the functionality of the website
 
 ### 6. NPM Packages
 1. colors
