@@ -1,22 +1,30 @@
 <section id="main" class="wrapper">
   <center>
     <div class="container">
-      <h2>Album Name</h2>
+      <h2>{{album.title}}</h2>
       <div class="6u 12u$(xsmall)">
         <div class="image fit captioned">
-          <img src="https://upload.wikimedia.org/wikipedia/en/8/85/Axiscover.jpg" alt="Filler Album"/>
-          <h3>Released:
+          <img src="{{album.PicURL}}" alt="Album"/>
+          <h3>Artist: {{album.artist}}
             <br>
-            Genre:
+            Released: {{album.year}}
             <br>
-            Length:
+            Genre: {{album.genre}}
             <br>
-            Label:
-            <br>
-            Producer:
             </h3>
         </div>
       </div>
     </div>
+          <hr>
+              {{#each album.reviews}}
+                <p>
+                  {{this.title}} <br>
+                  Rating: {{this.rating}} <br>
+                  {{this.comment}} <br>
+                  -- {{this.author}} 
+                </p>
+                <hr>
+            {{/each}}
+
   </center>
 </section>
