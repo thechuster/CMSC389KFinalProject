@@ -11,7 +11,7 @@
 
     Users will need to be able to add data to your local storage, and have live updates and a notification system.
 
-    - Added a way to chat via sockets.
+    - Added notifications with sockets.
 
 3. **View Data**
 

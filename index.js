@@ -12,6 +12,7 @@ var app = express();
 var PORT = 8000;
 var mongoose = require('mongoose');
 var router = express.Router();
+var date = require('date-fns');
 
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
@@ -219,13 +220,17 @@ app.get("/charts", function(req, res) {
           SUBMIT
 ****************************/
 
+
 app.get("/submit", function(req, res) {
 		res.render('submit');
 });
 
-
 app.get("/submit_review", function(req,res){
     res.render('submit_review');
+});
+
+app.get("/notifications", function(req,res){
+    res.render('notifications');
 });
 
 //handles submitting review via website and page redirection
