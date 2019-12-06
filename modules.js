@@ -1,25 +1,16 @@
 function average(list) {
 	var average = 0;
-	for (var i = 0; i < list.length; i++) {
-		average += list[i];
+	for (var i = 0; i < list.reviews.length; i++) {
+		average += list.reviews[i].rating;
 	}
-	return average/list.length;
+	return average/list.reviews.length;
 }
 
-function average(list) {
-	var average = 0;
-	for (var i = 0; i < list.length; i++) {
-	average += list[i];
-	}
-	return average/list.length;
-	}
-
-function square(n) {
-	return n*n;
+function test() {
+	return "This is a test";
 }
 
 module.exports = {
-	factorial: factorial,
-	square: square,
+	test: test,
 	average: average
 }

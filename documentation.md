@@ -116,8 +116,8 @@ Modules
 2. 
 
 ### 6. NPM Packages
-1. date-fns
-2. 
+1. colors
+2. one-liner-joke
 
 ### 7. User Interface
 

@@ -12,7 +12,9 @@ var app = express();
 var PORT = 8000;
 var mongoose = require('mongoose');
 var router = express.Router();
-var date = require('date-fns');
+var colors = require('colors');
+var oneLinerJoke = require('one-liner-joke');
+var operations = require("./modules");
 
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
@@ -68,6 +70,21 @@ app.get('/', function(req, res, next) {
             }
         });
 
+        // THESE ARE USEFUL NPM PACKAGES OK
+        console.log('hello'.green); // outputs green text
+        console.log('i like cake and pies'.underline.red) // outputs red underlined text
+        console.log('inverse the color'.inverse); // inverses the color
+        console.log('OMG Rainbows!'.rainbow); // rainbow
+        console.log('Run the trap'.trap); // Drops the bass
+
+        /*
+        The variable getRandomJoke will contain a random joke with a format:
+        {"body":"Artificial intelligence is no match for natural stupidity.","tags":["intelligence","stupid"]}
+        */
+        var getRandomJoke = oneLinerJoke.getRandomJoke();
+        console.log(getRandomJoke)
+        console.log(operations["test"]() + "")
+
         //render handlebars
         res.render('home', { 
             title: "ALBUMS", 
@@ -81,12 +98,17 @@ app.get('/', function(req, res, next) {
 app.get("/album/:album_name", function(req, res) {
 
     Album.findOne({ title: req.params.album_name }, function(err, album) {
-        if (err) throw err;   
+        if (err) throw err;
+        var average = null;
 
         console.log(album);
+        if (album != null) {
+            average = operations["average"](album);
+        }
 
 		res.render('album', {
-        album: album
+        album: album,
+        average : average
         });
     });
 });

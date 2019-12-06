@@ -1,21 +1,22 @@
-<ul>
 
-{{#each a_lst}}
+<div class="box alt">
+    <div class="row 50% uniform">
+        {{!-- <ul> --}}
 
-	<article>
-        <h2 class="title"><a href="../album/{{this.title}}">{{this.title}}</a></h2> <i>{{this.artist}}</i>
-        <br>
-        
-            {{this.reviews.length}} reviews.
+        {{#each a_lst}}
 
-        
-        <div class="content">
-            <img src="{{this.PicURL}}" height="300">
-        </div>
-        <a href="/submit_review">Write a review</a>
-        <hr>
-    </article>
+            <article>
+                <h2 class="title"><a href="../album/{{this.title}}">{{this.title}}</a></h2> <i>{{this.artist}}</i>
+                <br>
+                    {{this.reviews.length}} reviews.
+                <div class="4u">
+                    <img src="{{this.PicURL}}" height="300">
+                </div>
+                <a href="/submit_review">Write a review</a>
+            </article>
 
-{{/each}}
+        {{/each}}
 
-</ul>
+        {{!-- </ul> --}}
+</div>
+</div>

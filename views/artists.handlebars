@@ -1,9 +1,29 @@
-<ul>
-
-{{#each artists}}
+{{!-- <ul> --}}
+<section id="main" class="wrapper">
+	<div class="container"><section>
+		<div class="table-wrapper">
+			<table class = "alt">
+				<thead>
+					<tr>
+						<th>Artist Name</th>
+					</tr>
+				</thead>
+				<tbody>
+					{{#each artists}}
+					<tr>
+						<td><a href="artist/{{this}}">{{this}}</a></td>
+					</tr>
+					{{/each}}
+				</tbody>
+				{{!-- <tfoot>
+				</tfoot> --}}
+			</table>
+		</div>
+	</div>
+</section>
+{{!-- {{#each artists}}
 
 	<li><a href="artist/{{this}}">{{this}}</a></li>
 
-{{/each}}
-
-</ul>
+{{/each}} --}}
+{{!-- </ul> --}}
