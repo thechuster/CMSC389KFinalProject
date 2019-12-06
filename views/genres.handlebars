@@ -1,22 +1,9 @@
-{{#if tag}}
-<h2>Recent Reviews : {{tag}}</h2> 
-{{else}}
-<h2>Recent Reviews:</h2> 
-{{/if}}
+<ul>
 
-{{#each data}}
-<article>
-	<h2 class="title">{{this.title}}</h2> <i>{{time}}</i>
-	<hr>
-	<div class="content">
-	    {{{this.preview}}}...
-	</div>
-	<a href="/post/{{this.slug}}">Read more...</a>
-</article>
-{{else}}
+{{#each genres}}
 
-<article>
-    <h1>There are no blog posts yet. :(</h1>
-    <a href="/create">Write your first post!</a>
-</article>
+	<li><a href="genre/{{this}}">{{this}}</a></li>
+
 {{/each}}
+
+</ul>

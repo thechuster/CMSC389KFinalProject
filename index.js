@@ -58,8 +58,7 @@ mongoose.connection.on('error', function() {
 
 /* GET home page. */
 app.get('/', function(req, res, next) {    
-    var genres = [];
-    
+    var genres = [];    
     
     Album.find({}).then(function(albums) {      
         //iterates through all albums and makes a list of genres
@@ -87,11 +86,58 @@ app.get("/album/:album_name", function(req, res) {
     });
 });
 
+
+//displays a page with list of all genres
 app.get("/genres", function(req, res) {
-    var tags = dataUtil.getAllTags(_DATA);
-		res.render('genres', {
-        data: _DATA,
-        tags: tags
+
+    var genres = [];    
+    
+    Album.find({}).then(function(albums) {      
+        //iterates through all albums and makes a list of genres
+        albums.forEach(function(a) {
+            if (!(a.genre in genres)){
+                genres.push(a.genre);
+            }
+        });
+
+        genres.sort();
+
+        console.log(genres);
+
+        //render handlebars
+        res.render('genres', { 
+            title: "Genres", 
+            genres: genres
+           });
+    });
+
+});
+
+//displays list of albums for a specific genre
+app.get("/genre/:genre", function(req,res){
+    var genre = req.params.genre;
+    var a_lst = [];    
+    
+    Album.find({}).then(function(albums) {      
+        //iterates through all albums and adds those with the genre
+        albums.forEach(function(a) {
+            if ((a.genre == genre)){
+                a_lst.push(a);
+            }
+        });
+
+        
+        //sorts by album title
+        a_lst.sort(function(a1, a2){
+            return a1.title < a2.title;
+        });
+
+        console.log(a_lst);
+
+        res.render('genre', { 
+            a_lst: a_lst
+        });
+
     });
 });
 
@@ -103,6 +149,10 @@ app.get("/charts", function(req, res) {
     });
 });
 
+
+/****************************
+          SUBMIT
+****************************/
 
 app.get("/submit", function(req, res) {
 		res.render('submit');
@@ -137,7 +187,7 @@ app.post('/submit_review', function(req,res) {
 
     });
 
-    res.redirect('/album/sample');
+    res.redirect('/album/' + req.body.album);
 });
 
 
@@ -162,7 +212,7 @@ app.post('/submit_album', function(req,res) {
         if (err) throw err;     
     });  
 
-    res.redirect('/album/sample');
+    res.redirect('/album/' + req.body.title);
 });
 
 app.get("/chat", function(req, res) {
@@ -229,7 +279,7 @@ app.get('/post/:slug', function(req, res) {
 
 
 /****************************
-          RUN
+          API
 ****************************/
 
 app.post('/add_album', function(req,res) {
@@ -295,6 +345,10 @@ app.delete('/album/:id', function(req,res) {
         res.send('Album deleted!');
     });
 })
+
+/****************************
+            RUN
+****************************/
 
 
 // HEROKU
