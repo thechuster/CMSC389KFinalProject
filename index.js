@@ -51,7 +51,6 @@ mongoose.connection.on('error', function() {
 ****************************/
 
 
-
 /****************************
           WEBSITE
 ****************************/
@@ -79,10 +78,15 @@ app.get('/', function(req, res, next) {
 });
 
 app.get("/album/:album_name", function(req, res) {
-    var tags = dataUtil.getAllTags(_DATA);
+
+    Album.findOne({ title: req.params.album_name }, function(err, album) {
+        if (err) throw err;   
+
+        console.log(album);
+
 		res.render('album', {
-        data: _DATA,
-        tags: tags
+        album: album
+        });
     });
 });
 
@@ -100,6 +104,8 @@ app.get("/genres", function(req, res) {
             }
         });
 
+        const temp = new Set(genres);
+        genres = [...temp];
         genres.sort();
 
         console.log(genres);
@@ -125,6 +131,7 @@ app.get("/genre/:genre", function(req,res){
                 a_lst.push(a);
             }
         });
+        
 
         
         //sorts by album title
@@ -155,6 +162,9 @@ app.get("/artists", function(req, res) {
             }
         });
 
+
+        const temp = new Set(artists);
+        artists = [...temp];
         artists.sort();
 
         console.log(artists);
